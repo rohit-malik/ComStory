@@ -19,6 +19,8 @@ for i in range(len(y_list_emotion)):
     y_list_emotion[i] = dict_emotion[y_list_emotion[i]]
 
 X_test = ["The food was lousy - too sweet or too salty and the portions tiny."]
+for line in open("short_story.txt","r"):
+    X_test.append(line)
 cv = TfidfVectorizer(encoding='latin-1',lowercase=True,stop_words='english',tokenizer = token.tokenize)
 vectorizer = cv.fit(x_list)
 X_test_vectorized =  vectorizer.transform(X_test)
@@ -34,6 +36,10 @@ result_emotion = emotion_model.predict(X_test_vectorized)
 # result_sentiment_final = []
 # for value in result_sentiment:
 #     result_sentiment_final.append(list(value).index(max(value)))
+i = 0
 
+for result in result_emotion:
+    print(X_test[i] + "------" + str(dict_emotion_predict[result]))
+    i = i + 1
 
-print("The emotion in the text is : " + str(dict_emotion_predict[result_emotion[0]]) )
+#print("The emotion in the text is : " + str(dict_emotion_predict[result_emotion[0]]) )
