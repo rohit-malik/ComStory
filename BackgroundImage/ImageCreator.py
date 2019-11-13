@@ -1,15 +1,31 @@
 from PIL import Image
 import numpy as np
-emotion_dict = {'Angry': '#FF0000', 'Sad': '#800080', 'Neutral': '#008000', 'Disgust': '#99ff33', 'Surprise': '#ffa500', 'Fear': '#8a2be2', 'Happy': '#0d98ba'}
-im1 = Image.new("RGB", (1000, 500), emotion_dict['Angry'])
-im2 = Image.new("RGB", (1000, 500), emotion_dict['Sad'])
-im3 = Image.new("RGB", (1000, 500), emotion_dict['Surprise'])
 
-vis = np.concatenate((im1, im2), axis=0)
+def choose_col(dic,key):
+	lst = dic[key]
+	prob_list = []
+	color_list = []
+	for each in lst:
+		prob,color = each.split(',')
+		prob_list.append(prob)
+		color_list.append(color)
+	return np.random.choice(color_list, 1,p=prob_list)[0]
+
+
+def get_one_frame(emotion):
+	return Image.new("RGB", (1000, 500), choose_col(emotion_dict,emotion))
+emotion_dict = {'Angry': ['0.7,#FF0000','0.3,#d3d3d3'], 'Sad': ['0.1,#800080','0.3,#0d98ba','0.6,#8a2be2'], 'Neutral': ['1.0,#008000'], 'Disgust': ['0.7,#99ff33','0.25#f2ba49','0.05#0d98ba'], 'Surprise': ['1.0,#ffa500'], 'Fear': ['0.20,#8a2be2','0.68,#666666','0.12,#d3d3d3'], 'Happy': ['0.07,#ff0000','0.27,#ffff00','0.10,#00ff00','0.03,#0000ff','0.08,#800080','0.12,#f2ba49','0.05,#adff2f','0.14,#0d98ba','0.05,#8a2be2','0.09,#c71585']}
+#img = Image.new("RGB", (1000, 500), '#00ff00')
+im1 = Image.new("RGB", (1000, 500), choose_col(emotion_dict,'Angry'))
+im2 = Image.new("RGB", (1000, 500), choose_col(emotion_dict,'Sad'))
+im3 = Image.new("RGB", (1000, 500), choose_col(emotion_dict,'Surprise'))
+
+vis = np.concatenate((im2, im3), axis=0)
 img = Image.fromarray(vis, 'RGB')
-vis = np.concatenate((im3, img), axis=0)
+vis = np.concatenate((im1, img), axis=0)
 img = Image.fromarray(vis, 'RGB')
-img.show()
-img.save('angry_image.png')
+#img.show()
+img.save('Frame_image.png')
 #im.show()
 
+#print(choose_col(emotion_dict,'Happy'))
